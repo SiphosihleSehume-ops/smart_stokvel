@@ -1,0 +1,3 @@
+# List all pools
+# create/ -> create pool route
+# [id] -> # Individual pool details & deposit view
