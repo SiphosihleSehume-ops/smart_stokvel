@@ -62,5 +62,101 @@ contract StokvelPoolTest is Test {
             token.approve(address(pool), type(uint256).max);
         }
     }
+
+    function test_InitialPoolState() public view {
+        assertEq(address(pool.registry()), address(registry));
+        assertEq(address(pool.assetToken()), address(token));
+        assertEq(pool.contributionAmount(), CONTRIBUTION_AMOUNT);
+        assertEq(uint256(pool.poolState()), uint256(StokvelPool.PoolState.Active));
+        assertEq(pool.totalMembers(), 3);
+        assertEq(pool.currentRound(), 1);
+    }
+
+    function test_RevertWhen_UnregisteredUserCreatesPool() public {
+        address[] memory poolMembers = new address[](1);
+        poolMembers[0] = nonMember;
+
+        vm.expectRevert("Creator must be registered");
+        vm.prank(nonMember);
+        new StokvelPool(
+            address(registry),
+            address(token),
+            CONTRIBUTION_AMOUNT,
+            DURATION_PER_ROUND,
+            poolMembers
+        );
+    }
+
+    function test_DepositAndDistribution90PercentPayout() public {
+        // Total Pool Deposit for 3 members = 300 MTK
+        // Expected Payout (90%) = 270 MTK
+        // Expected Reserve (10%) = 30 MTK
+        uint256 expectedTotalPool = CONTRIBUTION_AMOUNT * 3;
+        uint256 expectedPayout = (expectedTotalPool * 90) / 100;
+        uint256 expectedReserve = (expectedTotalPool * 10) / 100;
+
+        uint256 initialRecipientBalance = token.balanceOf(creator);
+
+        // All 3 members deposit for Round 1
+        vm.prank(creator);
+        pool.contribute();
+
+        vm.prank(member1);
+        pool.contribute();
+
+        // Third contribution completes the round and triggers automatic 90% payout
+        vm.prank(member2);
+        pool.contribute();
+
+        // Verify creator (scheduled payout recipient for round 1) received 90%
+        uint256 finalRecipientBalance = token.balanceOf(creator);
+        assertEq(finalRecipientBalance - initialRecipientBalance + CONTRIBUTION_AMOUNT, expectedPayout);
+
+        // Verify contract retains 10% reserve balance
+        assertEq(token.balanceOf(address(pool)), expectedReserve);
+
+        // Verify pool advanced to Round 2
+        assertEq(pool.currentRound(), 2);
+    }
+
+    function test_FullLifecycleToDissolution() public {
+        address[3] memory payoutOrder = [creator, member1, member2];
+
+        // Execute all 3 rounds
+        for (uint256 round = 0; round < 3; round++) {
+            vm.prank(creator);
+            pool.contribute();
+
+            vm.prank(member1);
+            pool.contribute();
+
+            vm.prank(member2);
+            pool.contribute();
+        }
+
+        // Verify pool is dissolved after round 3 completion
+        assertEq(uint256(pool.poolState()), uint256(StokvelPool.PoolState.Dissolved));
+
+        // Verify no further contributions allowed
+        vm.expectRevert("Pool dissolved");
+        vm.prank(creator);
+        pool.contribute();
+    }
+
+    function test_RevertWhen_DoubleContributionInSameRound() public {
+        vm.prank(creator);
+        pool.contribute();
+
+        vm.expectRevert("Already contributed for this round");
+        vm.prank(creator);
+        pool.contribute();
+    }
+
+    function test_RevertWhen_NonMemberTriesToContribute() public {
+        vm.expectRevert("Not a pool member");
+        vm.prank(nonMember);
+        pool.contribute();
+    }
+
 }
  
