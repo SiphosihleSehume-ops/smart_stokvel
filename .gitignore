@@ -1,0 +1,11 @@
+# Node / frontend
+node_modules/
+.next/
+out/
+.env
+.env.local
+
+# Foundry / contracts
+contracts/out/
+contracts/cache/
+contracts/broadcast/
