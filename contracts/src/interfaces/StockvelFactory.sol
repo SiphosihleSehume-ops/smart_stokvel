@@ -37,3 +37,50 @@ contract StockvelFactory {
             registry.registerUser("ipfs://stockvel-factory");
         }
     }
+
+/// @notice Deploys a new StokvelPool with the caller as creator.
+    /// @dev Reverts with "Creator must be registered" (via StokvelPool's own constructor check)
+    ///      if the caller has not registered in UserRegistry.
+    /// @param assetToken The ERC-20 token used for contributions and payouts.
+    /// @param contributionAmount The fixed amount each member must contribute per round.
+    /// @param durationPerRound The nominal duration of each round, in seconds.
+    /// @param members The fixed list of pool members, in payout order.
+    /// @return pool The address of the newly deployed StokvelPool.
+    function createPool(
+        address assetToken,
+        uint256 contributionAmount,
+        uint256 durationPerRound,
+        address[] calldata members
+    ) external returns (address pool) {
+        require(registry.isRegistered(msg.sender), "Creator must be registered");
+
+        StokvelPool newPool = new StokvelPool(
+            address(registry),
+            assetToken,
+            contributionAmount,
+            durationPerRound,
+            members
+        );
+
+        pool = address(newPool);
+        allPools.push(pool);
+        _poolsByCreator[msg.sender].push(pool);
+
+        emit PoolCreated(pool, msg.sender, assetToken, contributionAmount, durationPerRound, members);
+    }
+
+    /// @notice Returns the total number of pools deployed through this factory.
+    function totalPools() external view returns (uint256) {
+        return allPools.length;
+    }
+
+    /// @notice Returns the full list of pools deployed through this factory.
+    function getAllPools() external view returns (address[] memory) {
+        return allPools;
+    }
+
+    /// @notice Returns the pools created by a given address.
+    function getPoolsByCreator(address creator) external view returns (address[] memory) {
+        return _poolsByCreator[creator];
+    }
+}
