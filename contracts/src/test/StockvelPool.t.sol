@@ -2,8 +2,8 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
-import "../src/UserRegistry.sol";
-import "../src/StokvelPool.sol";
+import "../UserRegistry.sol";
+import "../StokvelPool.sol";
 import "./mocks/MockERC20.sol";
 
 contract StokvelPoolTest is Test {
