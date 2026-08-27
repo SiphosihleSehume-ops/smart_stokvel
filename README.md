@@ -143,3 +143,17 @@ forge test -vv
 ## License
 
 MIT
+
+## Roadmap
+
+- [ ] Implement `UserRegistry.sol`
+- [ ] Implement `StokvelPool.sol`
+- [ ] Implement `StockvelFactory.sol` for deploying new pools
+- [ ] Wire up deployment scripts (`DeployRegistry.s.sol`, `DeployStockvel.s.sol`)
+- [ ] Connect frontend hooks (`useUserRegistry`, `useStokvelPool`) to deployed contracts
+- [ ] Build out pool list / create / detail pages under `frontend/src/pools`
+
+## License
+
+MIT
+
