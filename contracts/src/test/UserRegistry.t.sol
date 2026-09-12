@@ -10,7 +10,9 @@ contract UserRegistryTest is Test {
     address public user1 = address(0x1);
     address public user2 = address(0x2);
 
+    // When would one require to emit an event? Ofcourse to broscast it to an off-chain service or application right?
     event UserRegistered(address indexed userAddress, string identityHash);
+    // How do I know when and when not use an event ?
 
     function setUp() public {
         registry = new UserRegistry();
