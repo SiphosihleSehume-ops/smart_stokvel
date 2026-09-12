@@ -16,7 +16,7 @@ contract StokvelPoolTest is Test {
     address public member2 = address(0x12);
     address public nonMember = address(0x99);
 
-    uint256 public constant CONTRIBUTION_AMOUNT = 100 * 10**18; // 100 MTK
+    uint256 public constant CONTRIBUTION_AMOUNT = 100 * 10**18; // 100 MTK : what is MTK?
     uint256 public constant DURATION_PER_ROUND = 7 days;
 
     function setUp() public {
@@ -26,7 +26,7 @@ contract StokvelPoolTest is Test {
 
         // 2. Register participants in UserRegistry
         vm.prank(creator);
-        registry.registerUser("ipfs://creator");
+        registry.registerUser("ipfs://creator"); // Check what `ipfs` is..  Ii think its a unique link do indentify a user 
 
         vm.prank(member1);
         registry.registerUser("ipfs://member1");
@@ -35,10 +35,12 @@ contract StokvelPoolTest is Test {
         registry.registerUser("ipfs://member2");
 
         // 3. Fund members with tokens and approve pool contract spending
+        // Memory is being used here because we need fund the users onluy once when this function runs ?
         address[3] memory members = [creator, member1, member2];
-        
+
+        // Search what minting is? When a smart contract allocates funds based on the predefined rules we say it mints the hunds to its users?
         for (uint256 i = 0; i < members.length; i++) {
-            token.mint(members[i], 1_000 * 10**18);
+            token.mint(members[i], 1_000 * 10**18); // Arhh indeed a token conversion formula because we cannot work with fiat
         }
 
         // 4. Initialize Pool with registered members
@@ -69,7 +71,7 @@ contract StokvelPoolTest is Test {
         assertEq(pool.contributionAmount(), CONTRIBUTION_AMOUNT);
         assertEq(uint256(pool.poolState()), uint256(StokvelPool.PoolState.Active));
         assertEq(pool.totalMembers(), 3);
-        assertEq(pool.currentRound(), 1);
+        assertEq(pool.currentRound(), 1); // Value nmeeds to be incremenyted every after a payment cycle
     }
 
     function test_RevertWhen_UnregisteredUserCreatesPool() public {
@@ -110,13 +112,14 @@ contract StokvelPoolTest is Test {
 
         // Verify creator (scheduled payout recipient for round 1) received 90%
         uint256 finalRecipientBalance = token.balanceOf(creator);
+        // Why ois it that are subtracting thej initial balance? Is to handle the logic around that you cannot pay yourself in a traditionl stokvel
         assertEq(finalRecipientBalance - initialRecipientBalance + CONTRIBUTION_AMOUNT, expectedPayout);
 
         // Verify contract retains 10% reserve balance
         assertEq(token.balanceOf(address(pool)), expectedReserve);
 
         // Verify pool advanced to Round 2
-        assertEq(pool.currentRound(), 2);
+        assertEq(pool.currentRound(), 2); // Ensures tha tfter each payment the round auto progresses to 2or to the next
     }
 
     function test_FullLifecycleToDissolution() public {
