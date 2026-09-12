@@ -7,8 +7,8 @@ import "./UserRegistry.sol";
 contract StokvelPool {
     enum PoolState { Active, Dissolved }
 
-    UserRegistry public immutable registry;
-    IERC20 public immutable assetToken;
+    UserRegistry public immutable registry; // ASearch for what the immutable keyword is used for ?
+    IERC20 public immutable assetToken; // I think immutable is used to indicate that its an exterrnal smart contract.
     uint256 public immutable contributionAmount;
     uint256 public immutable durationPerRound;
 
@@ -19,8 +19,19 @@ contract StokvelPool {
     address[] private _members;
     mapping(address => bool) private _isMember;
     
-    // Mapping: roundNumber => memberAddress => hasContributed
+    // Mapping: roundNumber => memberAddress => hasContributed;
+interace IStokvelPool {
+    // This means you are registered member (address) tied to a specic roundan whether they contributed or not?
     mapping(uint256 => mapping(address => bool)) private _hasContributed;
+
+    /* 
+        {
+            id: {
+                address: bool; // hasContributed value
+            }
+        }
+    
+    */
     
     // Mapping: roundNumber => count of contributions
     mapping(uint256 => uint256) private _roundContributions;
@@ -42,4 +53,5 @@ contract StokvelPool {
 
     }
 
+}
 }
