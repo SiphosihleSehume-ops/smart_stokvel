@@ -17,7 +17,7 @@ contract StockvelFactoryTest is Test {
     address public member2 = address(0x12);
     address public nonMember = address(0x99);
 
-    uint256 public constant CONTRIBUTION_AMOUNT = 100 * 10 ** 18;
+    uint256 public constant CONTRIBUTION_AMOUNT = 100 * 10 ** 18; // converting it to wei perhaps?
     uint256 public constant DURATION_PER_ROUND = 7 days;
 
     function setUp() public {
@@ -40,6 +40,7 @@ contract StockvelFactoryTest is Test {
         poolMembers[2] = member2;
     }
 
+    // Checks i a member is registered in our pool ??
     function test_FactoryRegistersItself() public view {
         assertTrue(registry.isRegistered(address(factory)));
     }
