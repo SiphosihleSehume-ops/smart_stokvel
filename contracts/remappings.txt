@@ -1,1 +1,2 @@
-# Library import paths
+forge-std/=lib/forge-std/src/
+@openzeppelin/=lib/openzeppelin-contracts/
