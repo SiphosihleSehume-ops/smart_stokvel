@@ -20,7 +20,6 @@ contract StokvelPool {
     mapping(address => bool) private _isMember;
     
     // Mapping: roundNumber => memberAddress => hasContributed;
-interace IStokvelPool {
     // This means you are registered member (address) tied to a specic roundan whether they contributed or not?
     mapping(uint256 => mapping(address => bool)) private _hasContributed;
 
@@ -52,6 +51,4 @@ interace IStokvelPool {
         durationPerRound = _durationPerRound;
 
     }
-
-}
 }
