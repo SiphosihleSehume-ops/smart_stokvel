@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title IStokvelPool
 /// @notice Interface for a single rotating-savings (stokvel) pool.
-interface IStokvelPool {
+interface IStockvelPool {
     /// @notice Emitted whenever a member successfully contributes for the current round.
     event ContributionMade(address indexed member, uint256 indexed round, uint256 amount);
 
@@ -26,7 +26,7 @@ interface IStokvelPool {
     function registry() external view returns (IUserRegistry);
 
     /// @notice The ERC-20 token used for contributions and payouts.
-    function assetToken() external view returns (address);
+    function assetToken() external view returns (IERC20);
 
     /// @notice The fixed amount each member must contribute per round.
     function contributionAmount() external view returns (uint256);
