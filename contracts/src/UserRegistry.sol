@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-contract UserRegistry {
+import "./interfaces/IUserRegistry.sol";
+
+contract UserRegistry is IUserRegistry {
     struct UserProfile {
         string identityHash;
         uint256 registeredAt;
@@ -10,7 +12,7 @@ contract UserRegistry {
 
     mapping(address => UserProfile) private _users;
 
-    event UserRegistered(address indexed userAddress, string identityHash);
+    // event UserRegistered(address indexed userAddress, string identityHash);
 
     /**
      * @notice Registers a new user with an identity metadata hash (e.g., IPFS URI).
