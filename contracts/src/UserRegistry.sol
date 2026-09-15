@@ -12,8 +12,6 @@ contract UserRegistry is IUserRegistry {
 
     mapping(address => UserProfile) private _users;
 
-    // event UserRegistered(address indexed userAddress, string identityHash);
-
     /**
      * @notice Registers a new user with an identity metadata hash (e.g., IPFS URI).
      * @param identityHash The URI or hash pointing to user metadata.
