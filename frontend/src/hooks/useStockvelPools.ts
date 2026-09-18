@@ -2,7 +2,7 @@
 
 import { useReadContract, useReadContracts, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import type { Address } from "viem";
-import StokvelPoolAbi from "@/contracts/abis/StokvelPool.json";
+import StokvelPoolAbi from "@/contracts/abis/StockvelPool.json";
 import StockvelFactoryAbi from "@/contracts/abis/StockvelFactory.json";
 import { STOCKVEL_FACTORY_ADDRESS } from "@/contracts/addresses";
 import type { PoolDetails } from "@/types";
