@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { Address } from "viem";
-import { usePoolDetails } from "@/hooks/useStockvelPool";
+import { usePoolDetails } from "@/hooks/useStockvelPools";
 import { formatTokenAmount, shortenAddress } from "@/utils/formatters";
 import { PoolState } from "@/types";
 
