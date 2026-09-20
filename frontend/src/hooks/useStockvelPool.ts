@@ -6,7 +6,7 @@ import {
   useReadContracts,
   useWriteContract,
   useWaitForTransactionReceipt,
-} from "wagmi";
+} from "wagmi"; // wagmi and  viem dependencies are giving me problems
 import type { Address } from "viem";
 import StokvelPoolAbi from "@/contracts/abis/StockvelPool.json";
 
