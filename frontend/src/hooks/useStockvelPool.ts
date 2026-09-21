@@ -6,18 +6,10 @@ import {
   useReadContracts,
   useWriteContract,
   useWaitForTransactionReceipt,
-} from "wagmi"; // wagmi and  viem dependencies are giving me problems
+} from "wagmi";
 import type { Address } from "viem";
 import StokvelPoolAbi from "@/contracts/abis/StockvelPool.json";
-
-/**
- * PoolState enum mirrors `enum StokvelPool.PoolState` in the contract.
- * Update the member names/order here if the Solidity enum changes.
- */
-export enum PoolState {
-  Active = 0,
-  Dissolved = 1,
-}
+import { PoolState } from "@/types";
 
 /** Core read data for a single pool: asset token, contribution amount, round info, state. */
 export function useStockvelPool(poolAddress?: Address) {
