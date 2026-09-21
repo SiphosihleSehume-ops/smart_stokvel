@@ -73,20 +73,3 @@ export function usePoolDetails(poolAddress?: Address) {
 
   return { details, isLoading, error, refetch };
 }
-
-/** Contributes the pool's fixed `contributionAmount` for the current round. */
-export function useContribute(poolAddress?: Address) {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
-
-  function contribute() {
-    if (!poolAddress) return;
-    writeContract({
-      address: poolAddress,
-      abi: StokvelPoolAbi,
-      functionName: "contribute",
-    });
-  }
-
-  return { contribute, hash, isPending, isConfirming, isConfirmed, error };
-}
